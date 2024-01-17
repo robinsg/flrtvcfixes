@@ -1,6 +1,7 @@
 import csv
 import argparse
 import os
+import urllib.request
 
 def validate_arguments(args):
     if not 0 <= args.min_cvss_base_score <= 10:
@@ -25,8 +26,8 @@ def process_csv_file(file_path, min_cvss_base_score, output_directory):
             unique_rows = []
             current_row_index = -1
 
+            """Select unique rows with CVSS Base Score equal to or higher than value passed"""
             for row in reader:
-                #current_row_index += 1
                 cvss_base_scores = row[headers.index("CVSS Base Score")]
                 apar_type = row[headers.index("Type")]
                 abstract = row[headers.index("Abstract")]
@@ -49,6 +50,20 @@ def process_csv_file(file_path, min_cvss_base_score, output_directory):
                             break  # Exit the inner loop if a high score is found
 
             save_results(unique_rows, output_directory, headers)  # Save results to the output directory
+
+            """Now download the tar file for the unique apar rows"""
+            for row in unique_rows:
+                download_url = row[headers.index("Download URL")]
+                if download_url.endswith(".tar"):  # Check if URL ends with ".tar"
+                    try:
+                        filename = os.path.basename(download_url)  # Extract filename from URL
+                        download_path = os.path.join(output_directory, filename)
+                        print(f"Attempting to download file {filename}")
+                        urllib.request.urlretrieve(download_url, download_path)
+                        print(f"Downloaded file: {filename}")
+                    except Exception as e:
+                        print(f"Error downloading file from {download_url}: {e}")                
+
 
     except FileNotFoundError:
         print(f"Error: File not found: {file_path}")
