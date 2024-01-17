@@ -52,34 +52,3 @@ for row in unique_rows:
   rowcount += 1
 
 exit(0)
-
-
-
-
-
-
-
-
-    # Create an empty list to store the unique values in column 5
-    #unique_values = []
-
-    # Create an empty list to store the unique rows
-    #unique_rows = []
-
-    # Loop through each row in the reader object and check if the value in column 5 is already in the unique_values list
-    # If not, append it to the list and also append the row to the unique_rows list
-    #for row in reader:
-    #    if row[4] not in unique_values:
-    #        unique_values.append(row[4])
-    #       unique_rows.append(row)
-
-
-  
-  
-  
-  
-  
-  #print(row[9])
-  #x += 1
-  #print(x, "\n")
-
