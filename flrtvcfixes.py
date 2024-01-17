@@ -1,9 +1,21 @@
 import csv
 import argparse
+import os
 
 def process_csv_file(file_path, min_cvss_base_score, output_directory):
-    """Processes a CSV file, extracting rows with specific criteria and printing a summary."""
+    """Check for existence of CSV file"""
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"Error: CVSS file not found: {file_path}")
 
+    """Validate min_cvss_base_score"""
+    if not 0 <= min_cvss_base_score <= 10:
+        raise ValueError(f"Error: min_cvss_base_score must be between 0 and 10, but received: {min_cvss_base_score}")
+    
+    """Verify that the output directory exists"""
+    if not os.path.exists(output_directory):
+        raise ValueError(f"Error: Output directory does not exist: {output_directory}")   
+
+    """Processes a CSV file, extracting rows with specific criteria and printing a summary."""
     try:
         with open(file_path, 'r') as f:
             reader = csv.reader(f)
@@ -57,7 +69,15 @@ if __name__ == "__main__":
     parser.add_argument("csv_file", help="Path to the CSV file")
     parser.add_argument("min_cvss_base_score", type=float, help="Minimum CVSS Base Score")
     parser.add_argument("output_directory", help="Output directory to save results")
-    args = parser.parse_args()
 
-    process_csv_file(args.csv_file, args.min_cvss_base_score, args.output_directory)
-  
+    """Process CSV file"""
+    try:
+        args = parser.parse_args()
+        process_csv_file(args.csv_file, args.min_cvss_base_score, args.output_directory)
+    except FileNotFoundError as e:
+        print(e)
+        exit(1)  # Exit the script with an error code
+    except (FileNotFoundError, ValueError) as e:
+        print(e)
+        exit(1)
+    
