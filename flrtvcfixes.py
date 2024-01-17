@@ -19,33 +19,37 @@ def process_csv_file(file_path, min_cvss_base_score, output_directory):
     try:
         with open(file_path, 'r') as f:
             reader = csv.reader(f)
+            headers = next(reader)  # Extract the header row
 
-            unique_values = set()  # Use a set for faster uniqueness checks
+            unique_values = set() 
             unique_rows = []
             current_row_index = -1
 
             for row in reader:
-                current_row_index += 1
+                #current_row_index += 1
+                cvss_base_scores = row[headers.index("CVSS Base Score")]
+                apar_type = row[headers.index("Type")]
+                abstract = row[headers.index("Abstract")]
 
                 # Skip the header row
-                if current_row_index == 0:
-                    continue
+                #if current_row_index == 0:
+                #    continue
 
                 # Handle hiper fixes and CVSS scores above 7
-                if row[2] == "hiper":
-                    if row[4] not in unique_values:
-                        unique_values.add(row[4])  # Add to set for uniqueness
+                if "hiper" in apar_type:
+                    if abstract not in unique_values:
+                        unique_values.add(abstract)  # Add to set for uniqueness
                         unique_rows.append(row)
                         continue
 
-                cvss_base_scores = row[9]
+                #cvss_base_scores = row[9]
                 scores = cvss_base_scores.split()
 
                 for score in scores:
                     cvss_value = float(score.split(":")[1])  # Extract score efficiently
                     if cvss_value >= min_cvss_base_score:
-                        if row[4] not in unique_values:
-                            unique_values.add(row[4])  # Add to set for uniqueness
+                        if abstract not in unique_values:
+                            unique_values.add(abstract)  # Add to set for uniqueness
                             unique_rows.append(row)
                             break  # Exit the inner loop if a high score is found
 
