@@ -31,10 +31,6 @@ def process_csv_file(file_path, min_cvss_base_score, output_directory):
                 apar_type = row[headers.index("Type")]
                 abstract = row[headers.index("Abstract")]
 
-                # Skip the header row
-                #if current_row_index == 0:
-                #    continue
-
                 # Handle hiper fixes and CVSS scores above 7
                 if "hiper" in apar_type:
                     if abstract not in unique_values:
@@ -42,30 +38,33 @@ def process_csv_file(file_path, min_cvss_base_score, output_directory):
                         unique_rows.append(row)
                         continue
 
-                #cvss_base_scores = row[9]
                 scores = cvss_base_scores.split()
 
                 for score in scores:
-                    cvss_value = float(score.split(":")[1])  # Extract score efficiently
+                    cvss_value = float(score.split(":")[1])  # Extract scores
                     if cvss_value >= min_cvss_base_score:
                         if abstract not in unique_values:
                             unique_values.add(abstract)  # Add to set for uniqueness
                             unique_rows.append(row)
                             break  # Exit the inner loop if a high score is found
 
-            save_results(unique_rows, output_directory)  # Save results to the output directory
+            save_results(unique_rows, output_directory, headers)  # Save results to the output directory
 
     except FileNotFoundError:
         print(f"Error: File not found: {file_path}")
 
 
-def save_results(unique_rows, output_directory):
+def save_results(unique_rows, output_directory, headers):
     """Saves the processed data to a file named flrtvcapars.txt in the output directory."""
     output_file_path = os.path.join(output_directory, "flrtvcapars.txt")
 
     with open(output_file_path, "w", newline="") as output_file:  # Ensure consistent line endings across platforms
         writer = csv.writer(output_file)
-        writer.writerows(unique_rows)
+        #writer.writerows(unique_rows)
+        writer.writerows([
+            [row[headers.index(column)] for column in ["Fileset", "Type", "Reboot Required", "Abstract", "Bulletin URL", "Download URL"]]
+            for row in unique_rows
+        ])
 
     print(f"Results saved to: {output_file_path}")
 
