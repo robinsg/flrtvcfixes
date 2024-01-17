@@ -54,14 +54,16 @@ def process_csv_file(file_path, min_cvss_base_score, output_directory):
     except FileNotFoundError:
         print(f"Error: File not found: {file_path}")
 
-def save_results(unique_rows, output_directory):
-    """Saves the processed data to the specified output directory."""
-    
-    for unique in unique_rows:
-      print(unique,"\n\n")
 
-    # Implement logic to save the unique rows to a file within the output directory
-    # (e.g., using CSV, JSON, or other suitable format)
+def save_results(unique_rows, output_directory):
+    """Saves the processed data to a file named flrtvcapars.txt in the output directory."""
+    output_file_path = os.path.join(output_directory, "flrtvcapars.txt")
+
+    with open(output_file_path, "w", newline="") as output_file:  # Ensure consistent line endings across platforms
+        writer = csv.writer(output_file)
+        writer.writerows(unique_rows)
+
+    print(f"Results saved to: {output_file_path}")
 
 
 if __name__ == "__main__":
