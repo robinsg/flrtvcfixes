@@ -7,7 +7,7 @@ minimum cvss base score we pass to the script.<br><br>
 An example of running flrtvc would be:
 
 ```
-./flrtvc.ksh -d , > vc`date +"%Y%M%d-%H%M%S"`.txt
+./flrtvc.ksh -d , > vc`date +"%Y%m%d-%H%M%S"`.txt
 ```
 Once we have the file generated we can use this as input to flrtcvfixes.py<br><br>
 
