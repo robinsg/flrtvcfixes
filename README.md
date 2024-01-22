@@ -9,7 +9,7 @@ An example of running flrtvc would be:
 ```
 ./flrtvc.ksh -d , > vc`date +"%Y%M%d-%H%M%S"`.txt
 ```
-Oncew we have the file generated we can use this as input to flrtcvfixes.py<br><br>
+Once we have the file generated we can use this as input to flrtcvfixes.py<br><br>
 
 Run the following to download the ifices to /usr4/ifix directory
 
