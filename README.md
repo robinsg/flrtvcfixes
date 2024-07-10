@@ -1,7 +1,7 @@
 # Download AIX iFixes based on FLRTVC report
 
 The output from flrtvc.ksh can contain multiple rows for a file set. This python script will remove duplicate lines<br>
-and filter the row we are intersted in by capturing the file set with a CVSS Base Score equal tp or higher than the <br>
+and filter the row we are intersted in by capturing the file set with a CVSS Base Score equal to or higher than the <br>
 minimum cvss base score we pass to the script.<br><br>
 
 An example of running flrtvc would be:
